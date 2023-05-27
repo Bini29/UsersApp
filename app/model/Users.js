@@ -1,7 +1,8 @@
-Ext.define("namesapp.model.Users", {
+Ext.define("UsersApp.model.Users", {
   extend: "Ext.data.Model",
   alias: "model.Users",
   idProperty: "_id",
+
   fields: [
     {
       name: "id",

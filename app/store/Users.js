@@ -1,7 +1,7 @@
-Ext.define("namesapp.store.Users", {
+Ext.define("UsersApp.store.Users", {
   extend: "Ext.data.Store",
   alias: "store.users",
-  model: "namesapp.model.Users",
+  model: "UsersApp.model.Users",
   itemId: "users",
   storeId: "users",
   autoLoad: true,

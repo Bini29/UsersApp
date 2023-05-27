@@ -6,8 +6,8 @@
  */
 Ext.define("UsersApp.view.main.MainController", {
   extend: "Ext.app.ViewController",
-
   alias: "controller.main",
+  store: Ext.data.StoreManager.lookup("users"),
 
   init: function () {
     this.control({
@@ -15,11 +15,10 @@ Ext.define("UsersApp.view.main.MainController", {
         click: "createItem",
       },
     });
-    // Ext.data.StoreManager.lookup("users").load();
   },
 
   onItemSelected: function (sender, record) {
-    const store = Ext.data.StoreManager.lookup("users");
+    const store = sender.store;
     const itemId = record.getData().id;
     const grid = this.getView().down("gridpanel");
     const selectionModel = grid.getSelectionModel();
@@ -34,12 +33,12 @@ Ext.define("UsersApp.view.main.MainController", {
           handler: function (btn) {
             const win = btn.up("window"),
               form = win.down("form");
-            console.log(win.up("gridpanel"));
+
             if (form.isValid() && store.getById(itemId)) {
               store.getById(itemId).set(form.getValues());
               store.sync();
 
-              btn.up("window").hide();
+              btn.up("window").close();
               selectionModel.deselectAll();
             }
           },
@@ -48,9 +47,9 @@ Ext.define("UsersApp.view.main.MainController", {
           text: "Удалить",
           handler: function (btn) {
             store.remove(store.getById(itemId));
-
             store.sync();
-            btn.up("window").hide();
+
+            btn.up("window").close();
             selectionModel.deselectAll();
           },
         },
@@ -61,7 +60,9 @@ Ext.define("UsersApp.view.main.MainController", {
   },
 
   createItem: function () {
-    pop = Ext.create("UsersApp.view.main.PopUp", {
+    const store = this.getView().down("gridpanel").getStore();
+
+    const pop = Ext.create("UsersApp.view.main.PopUp", {
       title: "Создать пользователя",
       items: [{ xtype: "AddUserForm" }],
       buttons: [
@@ -70,15 +71,16 @@ Ext.define("UsersApp.view.main.MainController", {
           handler: function (btn) {
             const win = btn.up("window"),
               form = win.down("form");
+
             if (form.isValid()) {
-              const store = Ext.data.StoreManager.lookup("users");
               store.add(form.getValues());
               store.sync();
-              btn.up("window").hide();
+
+              btn.up("window").close();
             } else {
               Ext.MessageBox.show({
                 title: "Предупреждение",
-                message: "Это предупреждение.",
+                message: "Заполниет все поля",
                 buttons: Ext.MessageBox.OK,
                 icon: Ext.MessageBox.WARNING,
               });
@@ -88,8 +90,5 @@ Ext.define("UsersApp.view.main.MainController", {
       ],
     });
     pop.show();
-  },
-  removeItem: function () {
-    alert("remove");
   },
 });

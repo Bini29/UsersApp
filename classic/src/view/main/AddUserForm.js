@@ -7,10 +7,8 @@ Ext.define("UsersApp.view.main.AddUserForm", {
   store: { type: "users" },
 
   initComponent: function () {
-    console.log(this.up("window").config.data);
-    let fields;
     if (this.up("window").config.data) {
-      fields = [
+      this.items = [
         {
           fieldLabel: "ФИО",
           name: "fullName",
@@ -57,7 +55,7 @@ Ext.define("UsersApp.view.main.AddUserForm", {
         },
       ];
     } else {
-      fields = [
+      this.items = [
         {
           fieldLabel: "ФИО",
           name: "fullName",
@@ -102,7 +100,7 @@ Ext.define("UsersApp.view.main.AddUserForm", {
       ];
     }
 
-    this.items = fields;
+    // this.items = fields;
 
     this.callParent(arguments);
   },
